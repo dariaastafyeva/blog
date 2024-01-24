@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { AuthContext } from '../context/authContext';
 
 const Login = () => {
   const [inputs, setInputs] = useState({
@@ -13,6 +13,10 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const { login } = useContext(AuthContext);
+
+ 
+
   const handleChange = e => {
     setInputs(prev => ({
       ...prev,
@@ -23,7 +27,7 @@ const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.post("/auth/login", inputs);
+      await login(inputs);
       navigate("/");
     } catch (err) {
       setError(err.response.data);
@@ -33,8 +37,8 @@ const Login = () => {
     <div className="auth">
       <h1>Login</h1>
       <form >
-        <input required type="text" placeholder="username" name="username" onChange={handleChange}/>
-        <input required type="password" placeholder="password" name="password" onChange={handleChange}/>
+        <input required type="text" placeholder="username" name="username" onChange={handleChange} />
+        <input required type="password" placeholder="password" name="password" onChange={handleChange} />
         <button onClick={handleSubmit}>Login</button>
         {error && <p>{error}</p>}
         <span>Don't you have an account? <Link to="/register">Register</Link></span>
