@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from "axios";
+import { getText } from '../utils/utilFunctions';
 
 const Home = () => {
 
@@ -8,7 +9,7 @@ const Home = () => {
 
   const cat = useLocation().search;
 
-  useEffect(()=> {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/posts${cat}`);
@@ -53,13 +54,13 @@ const Home = () => {
         {posts.map(post => (
           <div className="post" key={post.id}>
             <div className="img">
-              <img src={post.img} alt="" />
+              <img src={`../upload/${post.img}`} alt="" />
             </div>
             <div className="content">
               <Link className='link' to={`/post/${post.id}`}>
                 <h1>{post.title}</h1>
               </Link>
-              <p>{post.desc}</p>
+              <p>{getText(post.desc)}</p>
               <button>Read More</button>
             </div>
           </div>

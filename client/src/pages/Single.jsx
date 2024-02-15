@@ -6,6 +6,8 @@ import Menu from '../components/Menu'
 import moment from 'moment'
 import { AuthContext } from '../context/authContext'
 import axios from 'axios'
+import DOMPurify from "dompurify";
+import { getText } from '../utils/utilFunctions'
 
 
 const Single = () => {
@@ -42,7 +44,7 @@ const Single = () => {
   return (
     <div className='single'>
       <div className="content">
-        <img src={post?.img} alt="" />
+        <img src={`../upload/${post?.img}`} alt="" />
         <div className="user">
           {post.userImg && <img src={post.userImg} alt="" />}
           <div className="info">
@@ -51,7 +53,7 @@ const Single = () => {
           </div>
           {currentUser.username === post.username && (
             <div className="edit">
-              <Link to={`/write?edit=2`}>
+              <Link to={`/write?edit=2`} state={post}>
                 <img src={Edit} alt="" />
               </Link>
               <Link>
@@ -61,7 +63,12 @@ const Single = () => {
           )}
         </div>
         <h1>{post.title}</h1>
-        {post.desc}
+        {/* {getText(post.desc)} */}
+        <p
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(post.desc),
+          }}
+        ></p>
       </div>
       <div className="menu">
         <Menu cat={post.cat}/>
